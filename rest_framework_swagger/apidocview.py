@@ -8,8 +8,9 @@ class APIDocView(APIView):
     def initial(self, request, *args, **kwargs):
         self.permission_classes = (self.get_permission_class(request),)
         protocol = "https" if request.is_secure() else "http"
-        self.host = request.build_absolute_uri()
+        self.host = SWAGGER_SETTINGS['api_host'] or request.build_absolute_uri() 
         self.api_path = SWAGGER_SETTINGS['api_path']
+        self.api_key = SWAGGER_SETTINGS['api_key']
         self.api_full_uri = "%s://%s%s" % (protocol, request.get_host(), self.api_path)
 
         return super(APIDocView, self).initial(request, *args, **kwargs)
